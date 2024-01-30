@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> findByLevel(Level level);
-    void deleteById(Long id);
+    void deleteNoteById(Long id);
 
 }
