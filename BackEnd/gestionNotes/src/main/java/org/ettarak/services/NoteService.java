@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ettarak.enumaration.Level;
+import org.ettarak.exception.NoteNotFoundException;
 import org.ettarak.models.HttpResponse;
 import org.ettarak.models.Note;
 import org.ettarak.repositories.NoteRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.ettarak.utils.DateUtil.dateTimeFormatter;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -57,6 +59,32 @@ public class NoteService {
                 .message("Note created successfully")
                 .status(CREATED)
                 .statusCode(CREATED.value())
+                .timeStamp(LocalDateTime.now().format(dateTimeFormatter()))
+                .build();
+    }
+
+    // update note
+    public HttpResponse<Note> updateNote(Note note) throws NoteNotFoundException {
+        log.info("Updating note with id {}", note.getId());
+
+        // using optional and Exception
+        Optional<Note> optionalNote = Optional.ofNullable(noteRepository.findById(note.getId()))
+                .orElseThrow(() -> new NoteNotFoundException("The note was not found on the database"));
+
+        // update existing note
+        Note updateNote = optionalNote.get();
+
+        updateNote.setId(note.getId());
+        updateNote.setTitle(note.getTitle());
+        updateNote.setDescription(note.getDescription());
+        updateNote.setLevel(note.getLevel());
+        noteRepository.save(updateNote);
+
+        return HttpResponse.<Note>builder()
+                .notes(Collections.singleton(updateNote))
+                .message("Note updated successfully")
+                .status(OK)
+                .statusCode(OK.value())
                 .timeStamp(LocalDateTime.now().format(dateTimeFormatter()))
                 .build();
     }
