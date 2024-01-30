@@ -88,4 +88,22 @@ public class NoteService {
                 .timeStamp(LocalDateTime.now().format(dateTimeFormatter()))
                 .build();
     }
+
+    // delete existing note by id
+    public HttpResponse<Note> deleteNote(Long id) throws NoteNotFoundException {
+        log.info("Deleting note from the database by id {}", id);
+        // searching note inside server
+        Optional<Note> optionalNote = Optional.ofNullable(noteRepository.findById(id))
+                .orElseThrow(() -> new NoteNotFoundException("The note was not found on the database"));
+        // deleting from the database
+        optionalNote.ifPresent(noteRepository::delete);
+
+        return HttpResponse.<Note>builder()
+                .notes(Collections.singleton(optionalNote.get()))
+                .message("Note deleting successfully")
+                .status(OK)
+                .statusCode(OK.value())
+                .timeStamp(LocalDateTime.now().format(dateTimeFormatter()))
+                .build();
+    }
 }
