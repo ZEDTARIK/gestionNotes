@@ -50,5 +50,5 @@ public class NoteResources {
     public ResponseEntity<HttpResponse<Note>> deleteNote(@PathVariable(value = "noteId") Long id) {
         return  ResponseEntity.ok().body(noteService.deleteNote(id));
     }
-    
+
 }
