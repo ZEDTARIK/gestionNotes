@@ -1,5 +1,6 @@
 package org.ettarak.exception;
 
+import jakarta.persistence.NoResultException;
 import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.ettarak.models.HttpResponse;
@@ -66,8 +67,8 @@ public class HandleException extends ResponseEntityExceptionHandler  {
             return createHttpErrorResponse(exception.getMessage(), exception);
         }
 
-        @ExceptionHandler(NoResourceFoundException.class)
-        public ResponseEntity<HttpResponse<?>> noResourceFoundException (NoResourceFoundException exception) {
+        @ExceptionHandler(NoResultException.class)
+        public ResponseEntity<HttpResponse<?>> noResultException (NoResultException exception) {
             return createHttpErrorResponse(exception.getMessage(), exception);
         }
 
