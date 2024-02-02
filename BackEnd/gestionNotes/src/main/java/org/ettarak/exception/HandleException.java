@@ -1,6 +1,6 @@
 package org.ettarak.exception;
 
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.ettarak.models.HttpResponse;
 import org.ettarak.utils.DateUtil;
@@ -11,10 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -55,4 +56,40 @@ public class HandleException extends ResponseEntityExceptionHandler  {
                 status);
         }
 
+        @ExceptionHandler(IllegalStateException.class)
+        public ResponseEntity<HttpResponse<?>> illegalStateException (IllegalStateException exception) {
+            return createHttpErrorResponse(exception.getMessage(), exception);
+        }
+
+        @ExceptionHandler(NoteNotFoundException.class)
+        public ResponseEntity<HttpResponse<?>> noteNotFoundException (NoteNotFoundException exception) {
+            return createHttpErrorResponse(exception.getMessage(), exception);
+        }
+
+        @ExceptionHandler(NoResourceFoundException.class)
+        public ResponseEntity<HttpResponse<?>> noResourceFoundException (NoResourceFoundException exception) {
+            return createHttpErrorResponse(exception.getMessage(), exception);
+        }
+
+        @ExceptionHandler(ServletException.class)
+        public ResponseEntity<HttpResponse<?>> servletException (ServletException exception) {
+            return createHttpErrorResponse(exception.getMessage(), exception);
+        }
+
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<HttpResponse<?>> exception (Exception exception) {
+            return createHttpErrorResponse(exception.getMessage(), exception);
+        }
+
+        private ResponseEntity<HttpResponse<?>> createHttpErrorResponse(String reason, Exception exception){
+            return new ResponseEntity<>(
+                    HttpResponse.builder()
+                            .reason(reason)
+                            .developerMessage(exception.getMessage())
+                            .status(HttpStatus.BAD_REQUEST)
+                            .statusCode(HttpStatus.BAD_REQUEST.value())
+                            .timeStamp(LocalDateTime.now().format(DateUtil.dateTimeFormatter()))
+                            .build(),
+                    HttpStatus.BAD_REQUEST);
+        }
 }
