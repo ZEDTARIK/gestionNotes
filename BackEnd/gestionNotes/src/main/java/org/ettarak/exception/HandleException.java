@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.ettarak.models.HttpResponse;
 import org.ettarak.utils.DateUtil;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
-public class HandleException extends ResponseEntityExceptionHandler  {
+public class HandleException extends ResponseEntityExceptionHandler implements ErrorController {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
