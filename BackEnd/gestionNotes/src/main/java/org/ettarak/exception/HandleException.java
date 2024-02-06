@@ -82,6 +82,7 @@ public class HandleException extends ResponseEntityExceptionHandler  {
             return createHttpErrorResponse(exception.getMessage(), exception);
         }
 
+        // return a format json with this structures
         private ResponseEntity<HttpResponse<?>> createHttpErrorResponse(String reason, Exception exception){
             return new ResponseEntity<>(
                     HttpResponse.builder()
