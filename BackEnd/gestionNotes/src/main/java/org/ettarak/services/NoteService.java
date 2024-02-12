@@ -68,11 +68,11 @@ public class NoteService {
         log.info("Updating note with id {}", note.getId());
 
         // using optional and Exception
-        Optional<Note> optionalNote = Optional.ofNullable(noteRepository.findById(note.getId()))
+        Optional<Note> optionalNote = Optional.of(noteRepository.findById(note.getId()))
                 .orElseThrow(() -> new NoteNotFoundException("The note was not found on the database"));
 
         // update existing note
-        Note updateNote = optionalNote.get();
+        Note updateNote = optionalNote.orElseThrow();
 
         updateNote.setId(note.getId());
         updateNote.setTitle(note.getTitle());
