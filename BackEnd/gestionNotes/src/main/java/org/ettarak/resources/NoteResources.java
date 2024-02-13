@@ -8,16 +8,13 @@ import org.ettarak.models.HttpResponse;
 import org.ettarak.models.Note;
 import org.ettarak.services.NoteService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 import static org.ettarak.utils.DateUtil.dateTimeFormatter;
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
@@ -46,7 +43,7 @@ public class NoteResources {
         return ResponseEntity.ok().body(noteService.filterNoteByLevel(level));
     }
 
-    // update note: .../note/updqte
+    // update note: .../note/update
     @PutMapping(path = "/update")
     public ResponseEntity<HttpResponse<Note>> updateNote(@RequestBody @Valid Note note) {
         return ResponseEntity.ok().body(noteService.updateNote(note));
