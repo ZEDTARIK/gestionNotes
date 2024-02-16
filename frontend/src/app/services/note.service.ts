@@ -1,9 +1,10 @@
 import { Note } from './../interface/note';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { CustomHttpResponse } from '../interface/custom-http-response';
+import { Console } from 'console';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +37,7 @@ export class NoteService {
         .pipe(tap(console.log), catchError(this.handlErrors))
     );
 
-    // delete existing note in the server by noteId
+  // delete existing note in the server by noteId
   deleteNote$ = (noteId: number) =>
     <Observable<CustomHttpResponse>>(
       this.http
@@ -45,7 +46,19 @@ export class NoteService {
     );
 
   // handle errors
-  private handlErrors(handleError: any): Observable<never> {
+  private handlErrors(httpError: HttpErrorResponse): Observable<never> {
+    console.error(httpError);
+    let errorMessage: string;
+
+    if (httpError.error instanceof ErrorEvent) {
+      errorMessage = `A client error occurred: ${httpError.error.message}`;
+    } else {
+      if (httpError.error) {
+        errorMessage = `${httpError.error.reason} - Error code ${httpError.status}`;
+      } else {
+        errorMessage = `An error occurred - Error code ${httpError.status}`;
+      }
+    }
     return throwError('Method not yet implemented');
   }
 }
