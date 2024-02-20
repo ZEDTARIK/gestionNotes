@@ -4,20 +4,19 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { CustomHttpResponse } from '../interface/custom-http-response';
-import { Console } from 'console';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NoteService {
-  private readonly server = '';
+  private readonly server = 'http://localhost:8085';
 
   constructor(private http: HttpClient) {}
 
   // get all notes from the server
   notes$ = <Observable<CustomHttpResponse>>(
     this.http
-      .get<CustomHttpResponse>(`${this.server}/notes/all`)
+      .get<CustomHttpResponse>(`${this.server}/note/all`)
       .pipe(tap(console.log), catchError(this.handlErrors))
   );
 
@@ -25,7 +24,7 @@ export class NoteService {
   saveNote$ = (note: Note) =>
     <Observable<CustomHttpResponse>>(
       this.http
-        .post<CustomHttpResponse>(`${this.server}/notes/add`, note)
+        .post<CustomHttpResponse>(`${this.server}/note/add`, note)
         .pipe(tap(console.log), catchError(this.handlErrors))
     );
 
@@ -33,7 +32,7 @@ export class NoteService {
   updateNote$ = (note: Note) =>
     <Observable<CustomHttpResponse>>(
       this.http
-        .put<CustomHttpResponse>(`${this.server}/notes/update`, note)
+        .put<CustomHttpResponse>(`${this.server}/note/update`, note)
         .pipe(tap(console.log), catchError(this.handlErrors))
     );
 
@@ -41,7 +40,7 @@ export class NoteService {
   deleteNote$ = (noteId: number) =>
     <Observable<CustomHttpResponse>>(
       this.http
-        .delete<CustomHttpResponse>(`${this.server}/notes/delete/${noteId}`)
+        .delete<CustomHttpResponse>(`${this.server}/note/delete/${noteId}`)
         .pipe(tap(console.log), catchError(this.handlErrors))
     );
 
