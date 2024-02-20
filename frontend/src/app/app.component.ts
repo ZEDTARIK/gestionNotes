@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NoteService } from './services/note.service';
-import { Observable } from 'rxjs';
 import { AppState } from './interface/app-state';
 import { CustomHttpResponse } from './interface/custom-http-response';
-import { map } from 'rxjs/operators';
 import { DataState } from './enum/data-state';
+import { Observable, of } from 'rxjs';
+import { catchError, map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +22,10 @@ export class AppComponent implements OnInit {
       .pipe(
         map(response => {
             return { dataState: DataState.LOADED_STATE, data: response}
+        }),
+        startWith({ dataState: DataState.LOADING_STATE}),
+        catchError((error: string) => {
+          return of({ dataState: DataState.ERROR_STATE, error: error})
         })
       );
   }
