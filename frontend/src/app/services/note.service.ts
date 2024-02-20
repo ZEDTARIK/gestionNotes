@@ -59,6 +59,6 @@ export class NoteService {
         errorMessage = `An error occurred - Error code ${httpError.status}`;
       }
     }
-    return throwError('Method not yet implemented');
+    return throwError(errorMessage);
   }
 }
