@@ -1,3 +1,10 @@
+<div>
+  {{ appState$ | async | json }}
+</div>
+<br />
+<br />
+
+
 <div class="page-content container note-has-grid">
   <ul class="nav nav-pills p-3 bg-white mb-3 rounded-pill align-items-center">
       <li class="nav-item pointer">
@@ -30,17 +37,21 @@
   </ul>
   <div class="tab-content bg-transparent">
       <div id="note-full-container" class="note-has-grid row">
-        <ng-container>
-          <ng-container>
+        <ng-container *ngIf="(appState$ | async) as result" [ngSwitch]="result.dataState">
+
+          <ng-container *ngSwitchCase="DataState.LOADING_STATE">
             <div  class="col-md-12 single-note-item text-center">
                 <div class="spinner-border text-info" role="status"></div>
             </div>
           </ng-container>
-          <ng-container>
+
+          <ng-container *ngSwitchCase="DataState.ERROR_STATE">
             <div class="alert-danger">
+              {{ result.error }}
             </div>
           </ng-container>
-          <ng-container>
+
+          <ng-container *ngSwitchCase="DataState.LOADED_STATE">
             <div class="col-md-4 single-note-item">
                 <div class="card card-body">
                     <span class="side-stick"></span>
@@ -112,7 +123,7 @@
                               </div>
                               <div class="modal-footer">
                                   <button class="btn btn-danger" id="closeModal" data-dismiss="modal">Discard</button>
-                                  <button type="submit" [class="btn btn-info">
+                                  <button type="submit" class="btn btn-info">
                                     <i class="fas fa-spinner fa-spin"></i>
                                     <span>Saving...</span>
                                     <span>Save</span>

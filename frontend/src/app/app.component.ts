@@ -14,6 +14,7 @@ import { catchError, map, startWith } from 'rxjs/operators';
 export class AppComponent implements OnInit {
 
   appState$: Observable<AppState<CustomHttpResponse>> | undefined;
+  readonly DataState = DataState;
 
   constructor(private noteService: NoteService) {}
 
