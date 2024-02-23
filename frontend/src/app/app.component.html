@@ -52,16 +52,18 @@
           </ng-container>
 
           <ng-container *ngSwitchCase="DataState.LOADED_STATE">
-            <div class="col-md-4 single-note-item">
+            <div *ngFor="let note of result?.data?.notes" class="col-md-4 single-note-item">
                 <div class="card card-body">
                     <span class="side-stick"></span>
                     <h5 class="note-title text-truncate w-75 mb-0">
-                      <i class="point fa fa-circle ml-1 font-10"></i></h5>
-                    <p class="note-date font-12 text-muted"></p>
-                    <div class="note-content">
-                        <p class="note-inner-content text-muted">
-                        </p>
-                    </div>
+                     {{ note.title }}
+                        <i class="point fa fa-circle ml-1 font-10"></i></h5>
+                        <p class="note-date font-12 text-muted">Since: {{ note.createdAt | date: 'MMMM d, y, h:mm a' }}</p>
+                        <div class="note-content">
+                          <p class="note-inner-content text-muted">
+                              {{ note.description}}
+                          </p>
+                      </div>
                     <div class="d-flex align-items-center">
                         <span  class="mr-1 pointer">
                           <i class="fa fa-trash remove-note">
